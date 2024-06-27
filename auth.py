@@ -1,7 +1,7 @@
 import streamlit as st
 from db import create_user, get_user
+import re
 
-# Função para criar conta
 def create_account():
     st.title("Criar Conta no Pet Pulse")
     username = st.text_input("Nome de Usuário", key="create_username")
@@ -13,13 +13,17 @@ def create_account():
             st.error("Todos os campos são obrigatórios.")
             return
         
+        # Validar o formato do e-mail usando regex
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            st.error("Formato de e-mail inválido. Por favor, insira um e-mail válido.")
+            return
+
         if get_user(username):
             st.error("Nome de usuário já existe! Por favor, escolha outro.")
         else:
             create_user(username, email, password)
             st.success("Conta criada com sucesso!")
             st.info("Agora você pode fazer login com seu nome de usuário e senha.")
-
 # Função para login
 def login():
     st.title("Login no Pet Pulse")

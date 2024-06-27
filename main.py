@@ -18,11 +18,7 @@ def main():
     # Adicione a imagem acima do título do menu
     st.sidebar.image("PetPulse.jpg", use_column_width=True)
     st.sidebar.title("Menu")
-
-    st.get_option("theme.primaryColor")
-    st.get_option("theme.textColor")
-
-
+    
     if "username" not in st.session_state:
         choice = st.sidebar.radio("Navegação", ["Criar Conta", "Login"])
         if choice == "Criar Conta":
