@@ -1,19 +1,16 @@
+# models/db.py
 import sqlite3
 
 def init_db():
     conn = sqlite3.connect('pets.db')
     c = conn.cursor()
-
-    # Criação da tabela users (se não existir)
     c.execute('''CREATE TABLE IF NOT EXISTS users
                  (username TEXT PRIMARY KEY, email TEXT, password TEXT)''')
-
-    # Criação da tabela pets (se não existir)
     c.execute('''CREATE TABLE IF NOT EXISTS pets
                  (owner_username TEXT, pet_name TEXT, pet_type TEXT, breed TEXT, gender TEXT,
-                  weight REAL, height REAL,
-                  heart_rate INTEGER, steps INTEGER, water_consumption INTEGER,
-                  food_consumption INTEGER, pressure INTEGER,
+                  heart_rate REAL DEFAULT 0.0, steps REAL DEFAULT 0.0, water_consumption REAL DEFAULT 0.0,
+                  food_consumption REAL DEFAULT 0.0, pressure REAL DEFAULT 0.0,
+                  weight REAL DEFAULT 0.0, height REAL DEFAULT 0.0, bmi REAL DEFAULT 0.0,
                   FOREIGN KEY(owner_username) REFERENCES users(username))''')
     conn.commit()
     conn.close()
@@ -36,8 +33,8 @@ def get_user(username):
 def add_pet(owner_username, pet_name, pet_type, breed, gender):
     conn = sqlite3.connect('pets.db')
     c = conn.cursor()
-    c.execute("INSERT INTO pets (owner_username, pet_name, pet_type, breed, gender, weight, height) VALUES (?, ?, ?, ?, ?, ?, ?)",
-              (owner_username, pet_name, pet_type, breed, gender, 0.0, 0.0))  # Inicializando peso e altura com 0.0
+    c.execute("INSERT INTO pets (owner_username, pet_name, pet_type, breed, gender) VALUES (?, ?, ?, ?, ?)",
+              (owner_username, pet_name, pet_type, breed, gender))
     conn.commit()
     conn.close()
 
@@ -49,11 +46,11 @@ def get_pets_by_owner(owner_username):
     conn.close()
     return pets
 
-def add_pet_data(owner_username, pet_name, heart_rate, steps, water_consumption, food_consumption, pressure, weight, height):
+def add_pet_data(owner_username, pet_name, heart_rate, steps, water_consumption, food_consumption, pressure, weight, height, bmi):
     conn = sqlite3.connect('pets.db')
     c = conn.cursor()
-    c.execute("UPDATE pets SET heart_rate=?, steps=?, water_consumption=?, food_consumption=?, pressure=?, weight=?, height=? WHERE owner_username=? AND pet_name=?",
-              (heart_rate, steps, water_consumption, food_consumption, pressure, weight, height, owner_username, pet_name))
+    c.execute("UPDATE pets SET heart_rate=?, steps=?, water_consumption=?, food_consumption=?, pressure=?, weight=?, height=?, bmi=? WHERE owner_username=? AND pet_name=?",
+              (heart_rate, steps, water_consumption, food_consumption, pressure, weight, height, bmi, owner_username, pet_name))
     conn.commit()
     conn.close()
 
