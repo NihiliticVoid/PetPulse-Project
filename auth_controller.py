@@ -8,7 +8,15 @@ def handle_create_account(username, email, password):
 
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return "Formato de e-mail inválido. Por favor, insira um e-mail válido."
-
+    
+    # Verifica se a senha tem pelo menos 4 caracteres
+    if len(password) < 4:
+        return "A senha deve ter pelo menos 4 caracteres."
+    
+    # Verifica se a senha contém pelo menos um caractere especial
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return "A senha deve conter pelo menos um caractere especial (!@#$%^&*(),.?\":{}|<>)."
+    
     if get_user(username):
         return "Nome de usuário já existe! Por favor, escolha outro."
 
